@@ -39,7 +39,7 @@ export class Livre {
         notes : Array <number> = [],
         dateRedac:Date,
         ecrivains:Array <Ecrivain>,
-        dispoVente:boolean = false,
+        dispoVente:boolean = true,
     ) {
         this.id = Livre.nbLivre;
         this.$titre = titre;
@@ -56,8 +56,7 @@ export class Livre {
 
         Livre.nbLivre ++;
         Livre.prixMoyen.push(prix);
-        console.log(Livre.prixMoyen);
-        console.log(this.dateModified);
+        console.log("Prix moyen" , Livre.prixMoyen);
          
     }
     
@@ -171,7 +170,29 @@ export class Livre {
      * afficher le titre, le résumé
      */
     public afficherTitreResume() {
+        let html = document.createElement("div");
+        html.setAttribute("class","intro");
+        let titre = document.createElement("h2");
+        titre.setAttribute("class","titre");
+        titre.innerText = this.titre;
+        let resume = document.createElement("p");
+        resume.setAttribute("class","resume");
+        resume.innerText = this.resume;
+        html.appendChild(titre);
+        html.appendChild(resume);
+        document.getElementById("container").appendChild(html);
         
+    }
+
+    /**
+     * ajouter un ou plusieurs commentaires
+     */
+    public ajouterCommentaires(value: Array <string>) {
+        if(value) {
+        this.commentaires = this.commentaires.concat(value)
+        } else {
+            throw "Merci d'entrer un tableau";          
+        }
     }
 
     /**
@@ -192,9 +213,9 @@ export class Livre {
      */
     public isOlderThan1970() {
         if (this.dateRedac.getTime()<=0){
-            return true;
+            return "oui";
         } else {
-            return false;
+            return "non";
         }
     }
 
@@ -209,6 +230,60 @@ export class Livre {
         }
         return prix;
     }
+
+    /**
+     * tronquer le résumé par rapport au nb de mot voulu( Bonus: on tronquera au mot près...)
+     */
+    public tronquerResume(value:number) {
+            let mots = this.resume.split(/[\W]+/);
+            mots = mots.slice(0,value);
+            console.log(mots);
+            this.resume = mots.join(" ");
+    }
+
+    /**
+     * retourner le nombre de mot que comporte le titre
+     */
+    public calculerNbMotsTitre() {
+        let mots = this.titre.split(/\b\w+\b/);
+        let nbMots = mots.length -1;
+        return nbMots
+    }
+
+    /**
+     * taille du livre
+     */
+    public tailleLivre() {
+        if(this.nbPag>400){
+            return "gros";
+        } else if (this.nbPag>200) {
+            return "moyen";
+        } else {
+            return "petit";
+        }
+    }
+
+    /**
+	 * ajouter un livre dans la collection
+	 */
+	public ajouterEcrivain(ecrivain:Ecrivain) {
+		if(ecrivain){
+			this.ecrivains.push(ecrivain);
+		} else {
+			throw "Merci d'entrer un objet ecrivain valide";			
+		}
+	}
+
+	/**
+	 * supprimer un livre de la collection
+	 */
+	public supprimerEcrivain(ecrivain:Ecrivain) {
+		if(ecrivain){
+			this.ecrivains.splice(this.ecrivains.indexOf(ecrivain),1);
+		} else {
+			throw "Merci d'entrer un objet Livre valide";			
+		}
+	}
 
     // MÉTHODE STATIQUE
 
