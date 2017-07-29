@@ -1,11 +1,13 @@
 import { Livre } from './Livre';
+import { Edition } from './Edition';
+import { Metadata } from './Metadata';
 
 ///
 /// Ecrivain
 ///
 
 
-export class Ecrivain {
+export class Ecrivain extends Metadata {
 
     // ATTRIBUTS
 
@@ -13,7 +15,7 @@ export class Ecrivain {
     protected nom:string;
     protected email: string;
     protected ville:string;
-    protected collection: Array<string>;
+    protected collection: Array<Livre>;
 
 	// ATTRIBUTS STATIQUES
 
@@ -30,9 +32,17 @@ export class Ecrivain {
         $nom: string,
         $email: string,
         $ville: string,
-        $collection: Array<string>,
+        $collection: Array<Livre> = [],
+		$adresse: string,
+        $codePostal: string,
+        $numSiret: string,
+        $dateDebutAct: Date = new Date(),
+        $pays: string = "France",
+        $date: Date = new Date(),
+        $latLong: Array <number> = []
         )
     {
+		super($adresse,$codePostal,$numSiret,$dateDebutAct);
 		this.id = Ecrivain.compteur;
 		this.nom = $nom;
 		this.email = $email;
@@ -76,11 +86,11 @@ export class Ecrivain {
 		this.ville = value;
 	}
 
-	public get $collection(): Array<string> {
+	public get $collection(): Array<Livre> {
 		return this.collection;
 	}
 
-	public set $collection(value: Array<string>) {
+	public set $collection(value: Array<Livre>) {
 		this.collection = value;
 	}
     
@@ -93,8 +103,8 @@ export class Ecrivain {
 		if(this.collection.length>=this.livresMax) {
 			throw "Nombre de livre maximum atteint";
 		} else {
-			if(livre.$titre && typeof(livre.$titre) == "string"){
-				this.collection.push(livre.$titre);
+			if(livre){
+				this.collection.push(livre);
 			} else {
 				throw "Merci d'entrer un objet Livre valide";			
 			}
@@ -105,8 +115,8 @@ export class Ecrivain {
 	 * supprimer un livre de la collection
 	 */
 	public supprimerLivre(livre:Livre) {
-		if(livre.$titre && typeof(livre.$titre) == "string"){
-			this.collection.splice(this.collection.indexOf(livre.$titre),1);
+		if(livre){
+			this.collection.splice(this.collection.indexOf(livre),1);
 		} else {
 			throw "Merci d'entrer un objet Livre valide";			
 		}
@@ -130,10 +140,56 @@ export class Ecrivain {
 	}
 
 	/**
-	 * Age moyen de ses livres
+	 * Age moyen de livres
 	 */
-	public name() {
+	public ageMoyenLivres() {
+		let ages:Array <number> = [];
+		this.collection.forEach(livre => {
+			ages.push(livre.calculerAgeLivre());
+		});
+		let total = ages.reduce(function(a, b) {
+            return a + b;
+        }, 0);
+		return (total/ages.length).toFixed(2);
+	}
+
+	/**
+	 * prix des livres en fr
+	 */
+	public prixLivresFr() {
+		let prix:Array <string> =[];
+		this.collection.forEach(livre => {
+			prix.push(livre.formatterPrix());
+		});
+		return prix;
+	}
+
+	/**
+	 * modifier le prix
+	 */
+	public modifierPrixLivre(livre:Livre,prix:number) {
+		let livreAmodifier = this.collection[this.collection.indexOf(livre)];
 		
+		livreAmodifier.$prix=prix;
+		livreAmodifier.$dateModified= new Date();
+	}
+	
+	/**
+	 * modifier le prix
+	 */
+	public modifierEditionLivre(livre:Livre,edition:Edition) {
+		let livreAmodifier = this.collection[this.collection.indexOf(livre)];
+		
+		livreAmodifier.$edition=edition;
+		livreAmodifier.$dateModified= new Date();
+	}
+
+	/**
+	 * Donner sa collection
+	 */
+	public donnerCollection(ecrivain:Ecrivain) {
+		let collectionDuDestinataire = ecrivain.$collection;
+		ecrivain.$collection = ecrivain.$collection.concat(this.collection);
 	}
 
 }

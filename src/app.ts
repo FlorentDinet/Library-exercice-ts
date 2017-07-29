@@ -13,28 +13,53 @@ var editionGriffon = new Edition(
     "Griffon",
     "Editeur de livres pour enfant",
     new Date(),
-    15
+    15,
+    "48 Avenue du Maréchal Juin, 66100 Perpignan, France",
+    "66100",
+    "234 235 654 4567",
+
+);
+
+var Gnome = new Edition(
+    "Gnome",
+    "Editeur de livres pour enfant",
+    new Date(),
+    12,
+    "24 Route de la Poste, 33370 Pompignac, France",
+    "33370",
+    "564 127 967 45789"
 );
 
 var oReilly = new Edition(
     "O'Reilly",
     "Edition",
     new Date(),
-    17
+    17,
+    "Boucansaud, 71300 Marigny, France",
+    "71300",
+    "466 785 325 47954"
 );
 
 var jkRowling = new Ecrivain(
     "J.K Rowling",
     "jk.rowling@gmail.com",
-    "London",
-    ["Harry Potter"]
+    "Les Aspres",
+    [],
+    "La Grande Noé, 61270 Les Aspres, France",
+    "61270",
+    "345 456 765 67890",
+    new Date(1966,10,23)
 );
 
 var jeanLouis = new Ecrivain(
     "J.L Script",
     "jl.script@gmail.com",
-    "Bagdad",
-    ["Eloquent Javascript"]
+    "Cérilly",
+    [],
+    "D965, 21330 Cérilly, France",
+    "21330",
+    "456 543 234 456785",
+    new Date(2003,5,3)
 );
 
 var harryPotter = new Livre(
@@ -51,6 +76,8 @@ var harryPotter = new Livre(
     true
     );
 
+    jkRowling.ajouterLivre(harryPotter);
+
 var eloquentJavascript = new Livre(
     "Eloquent Javascript",
     "Sunt laborum qui id est in aliquip deserunt ut.",
@@ -60,10 +87,12 @@ var eloquentJavascript = new Livre(
     new Date(),
     [],
     [],
-    new Date(2013,6,23),
+    new Date(2000,6,23),
     [jeanLouis],
     true
     );
+
+    jeanLouis.ajouterLivre(eloquentJavascript);
 
 
 harryPotter.formatterTitre();
@@ -83,6 +112,13 @@ console.log("Taille du livre : ", harryPotter.tailleLivre());
 
 jkRowling.ajouterLivre(harryPotter);
 jkRowling.ajouterLivre(eloquentJavascript);
+jkRowling.ajouterLivre(eloquentJavascript);
+jkRowling.ajouterLivre(eloquentJavascript);
+jkRowling.ajouterLivre(eloquentJavascript);
+jkRowling.ajouterLivre(eloquentJavascript);
+console.log("Age moyen des livres de J.K.R : ",jkRowling.ageMoyenLivres());
+console.log("Prix des livres en fr : ",jkRowling.prixLivresFr());
+
 jkRowling.supprimerLivre(eloquentJavascript);
 console.log("La collection de J.K.R : ",jkRowling.$collection);
 
@@ -103,4 +139,20 @@ jkRowling.retirerVente([harryPotter,eloquentJavascript]);
 console.log("HP dispo à la vente : ",harryPotter.$dispoVente);
 console.log("Eloquent JS dispo à la vente : ",eloquentJavascript.$dispoVente);
 
+jkRowling.modifierPrixLivre(harryPotter,24);
+jkRowling.modifierEditionLivre(harryPotter,Gnome);
 
+console.log("Nouveau prix HP : ",harryPotter.$prix);
+console.log("Nouvelle edition HP : ",harryPotter.$edition);
+
+jkRowling.donnerCollection(jeanLouis);
+
+console.log("La nouvelle collection de jean louis : ",jeanLouis.$collection);
+
+console.log("Test SIRET J.K.R = ",jkRowling.testSIRET());
+console.log("Test SIRET jeanLouis = ",jeanLouis.testSIRET());
+
+console.log("Departement J.K.R = ",jkRowling.extraireDepartement());
+
+console.log("Dob de J.K.R = ",jkRowling.$dateDebutAct);
+console.log("J.K.R a 50 ans ? = ",jkRowling.is50y());

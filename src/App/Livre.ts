@@ -117,6 +117,14 @@ export class Livre {
     public set $nbPag(value: number) {
         this.nbPag = value;
     }
+    
+    public get $dateModified(): Date {
+        return this.dateModified;
+    }
+
+    public set $dateModified(value: Date) {
+        this.dateModified = value;
+    }
 
     public get $dateRedac(): Date {
         return this.dateRedac;
@@ -203,8 +211,10 @@ export class Livre {
         let now = new Date();
         let diff = now.valueOf()-dob.valueOf();
         let test = moment.duration(diff, 'ms');
+        console.log("TEST : ",test.years());
+        
 /*        console.log(test.years(),test.days());*/
-        return moment([2013, 6, 25]).fromNow(true);
+        return test.years();
 
     }
 

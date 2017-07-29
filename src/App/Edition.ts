@@ -1,11 +1,12 @@
 import { Livre } from './Livre';
+import { Metadata } from './Metadata';
 
 ///
 /// Edition
 ///
 
 
-export class Edition {
+export class Edition extends Metadata {
 
     // ATTRIBUTS
 
@@ -22,9 +23,17 @@ export class Edition {
         $nom: string,
         $activite: string,
         $dateCreation: Date = new Date(),
-        $note: number
+        $note: number,
+        $adresse: string,
+        $codePostal: string,
+        $numSiret: string,
+        $dateDebutAct: Date = new Date(),
+        $pays: string = "France",
+        $date: Date = new Date(),
+        $latLong: Array <number> = []
         )
     {
+		super($adresse,$codePostal,$numSiret,$dateDebutAct);
 		this.id = Edition.compteur;
 		this.nom = $nom;
 		this.activite = $activite;
